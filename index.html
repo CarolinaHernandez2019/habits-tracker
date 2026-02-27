@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Mis hábitos</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <div id="app">
+
+    <!-- ═══ Header con racha general ═══ -->
+    <header id="header">
+      <div class="streak-main">
+        <span class="streak-flame" id="main-flame"></span>
+        <span class="streak-number" id="main-streak">0</span>
+        <span class="streak-label">días de racha</span>
+      </div>
+      <div class="header-subtitle" id="header-subtitle">¡Empezá hoy!</div>
+      <div class="sync-indicator" id="sync-indicator">
+        <span class="sync-dot" id="sync-dot"></span>
+        <span class="sync-text" id="sync-text">Conectando...</span>
+      </div>
+    </header>
+
+    <!-- ═══ Contenido principal ═══ -->
+    <main id="main-content">
+
+      <!-- ── Vista: Hábitos del día ── -->
+      <section id="view-habits" class="view active">
+        <div class="date-nav">
+          <button id="prev-day" class="btn-nav" aria-label="Día anterior">‹</button>
+          <span id="current-date"></span>
+          <button id="next-day" class="btn-nav" aria-label="Día siguiente">›</button>
+        </div>
+
+        <div class="habits-list" id="habits-list">
+          <!-- Se genera desde JS -->
+        </div>
+
+        <!-- Gym semanal -->
+        <div class="gym-card" id="gym-card">
+          <div class="gym-header">
+            <span class="habit-icon">💪</span>
+            <span class="habit-name">Gym</span>
+            <span class="gym-counter" id="gym-counter">0/3 esta semana</span>
+          </div>
+          <div class="gym-dots" id="gym-dots">
+            <!-- 7 puntos lun-dom generados en JS -->
+          </div>
+          <div class="gym-streak" id="gym-streak"></div>
+        </div>
+
+        <!-- Progreso del día -->
+        <div class="daily-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="daily-progress-fill"></div>
+          </div>
+          <span class="progress-text" id="daily-progress-text">0/5 hábitos</span>
+        </div>
+      </section>
+
+      <!-- ── Vista: Mediciones corporales ── -->
+      <section id="view-measurements" class="view">
+        <h2 class="section-title">Mediciones corporales</h2>
+
+        <div class="measurements-grid" id="measurements-grid">
+          <!-- Se genera desde JS -->
+        </div>
+
+        <button class="btn-primary" id="btn-add-measurement">+ Registrar medición</button>
+
+        <!-- Modal para agregar medición -->
+        <div class="modal-overlay" id="modal-measurement">
+          <div class="modal">
+            <div class="modal-header">
+              <h3>Nueva medición</h3>
+              <button class="btn-close" id="btn-close-measurement">×</button>
+            </div>
+            <form id="form-measurement">
+              <div class="form-group">
+                <label for="m-month">Mes</label>
+                <input type="month" id="m-month" required>
+              </div>
+              <div class="form-group">
+                <label for="m-peso">Peso (kg)</label>
+                <input type="number" id="m-peso" step="0.1" placeholder="70,8">
+              </div>
+              <div class="form-group">
+                <label for="m-musculo">Músculo (%)</label>
+                <input type="number" id="m-musculo" step="0.1" placeholder="60">
+              </div>
+              <div class="form-group">
+                <label for="m-proteina">Proteína (%)</label>
+                <input type="number" id="m-proteina" step="0.1" placeholder="14,5">
+              </div>
+              <div class="form-group">
+                <label for="m-grasa">Grasa corporal (%)</label>
+                <input type="number" id="m-grasa" step="0.1" placeholder="36">
+              </div>
+              <div class="form-group">
+                <label for="m-visceral">Grasa visceral</label>
+                <input type="number" id="m-visceral" step="0.1" placeholder="7">
+              </div>
+              <div class="form-group">
+                <label for="m-agua">Agua (%)</label>
+                <input type="number" id="m-agua" step="0.1" placeholder="46">
+              </div>
+              <button type="submit" class="btn-primary">Guardar</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Vista: Calendario ── -->
+      <section id="view-calendar" class="view">
+        <div class="calendar-nav">
+          <button id="prev-month" class="btn-nav">‹</button>
+          <span id="calendar-month"></span>
+          <button id="next-month" class="btn-nav">›</button>
+        </div>
+        <div class="calendar-legend">
+          <span class="legend-item"><span class="legend-dot legend-all"></span> Todos</span>
+          <span class="legend-item"><span class="legend-dot legend-partial"></span> Parcial</span>
+          <span class="legend-item"><span class="legend-dot legend-none"></span> Ninguno</span>
+        </div>
+        <div class="calendar-grid" id="calendar-grid">
+          <!-- Se genera desde JS -->
+        </div>
+        <div class="calendar-stats" id="calendar-stats"></div>
+      </section>
+    </main>
+
+    <!-- ═══ Navegación inferior ═══ -->
+    <nav id="bottom-nav">
+      <button class="nav-btn active" data-view="habits">
+        <span class="nav-icon">🔥</span>
+        <span class="nav-label">Hábitos</span>
+      </button>
+      <button class="nav-btn" data-view="measurements">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Mediciones</span>
+      </button>
+      <button class="nav-btn" data-view="calendar">
+        <span class="nav-icon">📅</span>
+        <span class="nav-label">Calendario</span>
+      </button>
+      <button class="nav-btn" data-view="settings">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Datos</span>
+      </button>
+    </nav>
+
+    <!-- ── Vista: Configuración (export/import) ── -->
+    <div class="modal-overlay" id="modal-settings">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Datos</h3>
+          <button class="btn-close" id="btn-close-settings">×</button>
+        </div>
+        <div class="settings-content">
+          <p class="settings-info">Los datos se guardan en este navegador. Usá export/import para hacer backup o pasar a otro dispositivo.</p>
+          <button class="btn-primary" id="btn-export">📤 Exportar datos (JSON)</button>
+          <button class="btn-secondary" id="btn-import">📥 Importar datos</button>
+          <input type="file" id="file-import" accept=".json" hidden>
+          <hr>
+          <button class="btn-danger" id="btn-reset">🗑️ Borrar todos los datos</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

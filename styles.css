@@ -1,0 +1,890 @@
+/* ═══════════════════════════════════════
+   Habit Tracker — Mobile-first styles
+   ═══════════════════════════════════════ */
+
+/* Paleta de colores */
+:root {
+  --bg-primary: #0f0f1a;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #22223a;
+  --accent: #e94560;
+  --accent-glow: rgba(233, 69, 96, 0.3);
+  --success: #00c9a7;
+  --success-glow: rgba(0, 201, 167, 0.3);
+  --warning: #ffc93c;
+  --warning-glow: rgba(255, 201, 60, 0.3);
+  --danger: #ff6b6b;
+  --text-primary: #eaeaea;
+  --text-secondary: #8888a0;
+  --text-muted: #555570;
+  --border: #2a2a40;
+  --streak-cold: #6c7a89;
+  --streak-warm: #ff9f43;
+  --streak-hot: #ee5a24;
+  --streak-fire: #e94560;
+  --nav-height: 64px;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: calc(var(--nav-height) + 16px);
+}
+
+/* ═══ Header ═══ */
+#header {
+  text-align: center;
+  padding: 24px 16px 16px;
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-primary) 100%);
+}
+
+.streak-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.streak-flame {
+  font-size: 2.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+  animation: flame-pulse 2s ease-in-out infinite;
+}
+
+.streak-flame.cold {
+  filter: none;
+  animation: none;
+}
+
+@keyframes flame-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes flame-glow {
+  0%, 100% { filter: drop-shadow(0 0 8px var(--accent-glow)); }
+  50% { filter: drop-shadow(0 0 16px var(--accent-glow)) brightness(1.1); }
+}
+
+.streak-flame.hot {
+  animation: flame-glow 1.5s ease-in-out infinite;
+}
+
+.streak-number {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--streak-warm), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.streak-number.cold {
+  background: var(--streak-cold);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.streak-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  align-self: flex-end;
+  padding-bottom: 8px;
+}
+
+.header-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Indicador de sincronización */
+.sync-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background 0.3s;
+}
+
+.sync-dot.synced {
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success-glow);
+}
+
+.sync-dot.syncing {
+  background: var(--warning);
+  animation: sync-pulse 1s ease-in-out infinite;
+}
+
+.sync-dot.offline {
+  background: var(--danger);
+}
+
+.sync-dot.no-config {
+  background: var(--text-muted);
+}
+
+@keyframes sync-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ═══ Vistas ═══ */
+.view {
+  display: none;
+  padding: 0 16px;
+}
+
+.view.active {
+  display: block;
+}
+
+/* ═══ Navegación de fecha ═══ */
+.date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 0;
+  margin-bottom: 8px;
+}
+
+.date-nav span {
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 180px;
+  text-align: center;
+}
+
+.btn-nav {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.btn-nav:active {
+  background: var(--bg-card-hover);
+}
+
+/* ═══ Lista de hábitos ═══ */
+.habits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.habit-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.habit-card:active {
+  transform: scale(0.98);
+}
+
+.habit-card.completed {
+  border-color: var(--success);
+  background: linear-gradient(135deg, rgba(0, 201, 167, 0.08), transparent);
+}
+
+.habit-icon {
+  font-size: 1.5rem;
+  width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.habit-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.habit-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.habit-streak-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.habit-check {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.habit-card.completed .habit-check {
+  background: var(--success);
+  border-color: var(--success);
+  box-shadow: 0 0 12px var(--success-glow);
+}
+
+.habit-streak-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.habit-streak-badge.fire {
+  background: rgba(233, 69, 96, 0.15);
+  color: var(--streak-warm);
+}
+
+.habit-streak-badge.cold {
+  background: rgba(108, 122, 137, 0.15);
+  color: var(--streak-cold);
+}
+
+/* ═══ Gym card ═══ */
+.gym-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.gym-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.gym-header .habit-name {
+  flex: 1;
+}
+
+.gym-counter {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.gym-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.gym-dot {
+  flex: 1;
+  aspect-ratio: 1;
+  max-width: 44px;
+  border-radius: 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  gap: 2px;
+}
+
+.gym-dot:active {
+  transform: scale(0.95);
+}
+
+.gym-dot .day-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gym-dot .day-check {
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.gym-dot.active {
+  background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(233, 69, 96, 0.05));
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.gym-dot.active .day-check {
+  opacity: 1;
+}
+
+.gym-streak {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* ═══ Progreso del día ═══ */
+.daily-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-card);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), var(--warning));
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ═══ Mediciones ═══ */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 16px 0 12px;
+}
+
+.measurements-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.measurement-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.measurement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.measurement-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.measurement-values {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.measurement-current {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.measurement-bar {
+  height: 6px;
+  background: var(--bg-primary);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.measurement-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.measurement-bar-fill.good {
+  background: var(--success);
+}
+
+.measurement-bar-fill.mid {
+  background: var(--warning);
+}
+
+.measurement-bar-fill.bad {
+  background: var(--danger);
+}
+
+.measurement-bar-goal {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 12px;
+  background: var(--text-primary);
+  border-radius: 1px;
+}
+
+.measurement-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Gráfica sparkline en mediciones */
+.measurement-sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 30px;
+  margin-top: 8px;
+}
+
+.spark-bar {
+  flex: 1;
+  background: var(--accent);
+  border-radius: 2px 2px 0 0;
+  min-height: 3px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.spark-bar:last-child {
+  opacity: 1;
+}
+
+.spark-bar.at-goal {
+  background: var(--success);
+}
+
+/* ═══ Calendario ═══ */
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 0 12px;
+}
+
+.calendar-nav span {
+  font-size: 1rem;
+  font-weight: 600;
+  min-width: 150px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.calendar-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-all {
+  background: var(--success);
+}
+
+.legend-partial {
+  background: var(--warning);
+}
+
+.legend-none {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.calendar-header-cell {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  padding: 4px 0;
+  text-transform: uppercase;
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.calendar-cell.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.calendar-cell.all {
+  background: var(--success);
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-cell.partial {
+  background: var(--warning);
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+.calendar-cell.none {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--text-secondary);
+}
+
+.calendar-cell.today {
+  border: 2px solid var(--accent);
+}
+
+.calendar-cell.future {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.calendar-stats {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.cal-stat-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.cal-stat-value.good { color: var(--success); }
+.cal-stat-value.mid { color: var(--warning); }
+.cal-stat-value.bad { color: var(--danger); }
+
+.cal-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ═══ Navegación inferior ═══ */
+#bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 100;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.nav-btn.active {
+  color: var(--accent);
+}
+
+.nav-icon {
+  font-size: 1.3rem;
+}
+
+.nav-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ═══ Modal ═══ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  background: var(--bg-card);
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px 20px;
+  animation: slide-up 0.3s ease;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ═══ Formularios ═══ */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ═══ Botones ═══ */
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:active {
+  opacity: 0.8;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 8px;
+}
+
+.btn-danger {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 16px;
+}
+
+.settings-content {
+  padding-bottom: 20px;
+}
+
+.settings-info {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+/* ═══ Animación de check ═══ */
+@keyframes check-pop {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.habit-card.just-checked .habit-check {
+  animation: check-pop 0.3s ease;
+}
+
+/* ═══ Confetti / celebración ═══ */
+.celebration {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  animation: confetti-fall 1.5s ease forwards;
+  pointer-events: none;
+  z-index: 300;
+}
+
+@keyframes confetti-fall {
+  0% { top: -50px; opacity: 1; }
+  100% { top: 60vh; opacity: 0; }
+}
+
+/* ═══ Responsive — tablet+ ═══ */
+@media (min-width: 600px) {
+  #app {
+    max-width: 480px;
+  }
+
+  .calendar-grid {
+    gap: 6px;
+  }
+}
