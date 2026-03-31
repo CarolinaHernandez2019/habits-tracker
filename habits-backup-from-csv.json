@@ -1,0 +1,35 @@
+{
+  "habits": {
+    "2026-02-23": {"gym": false},
+    "2026-02-24": {"gym": false},
+    "2026-02-25": {"gym": true},
+    "2026-02-26": {"gym": false, "agua": true, "congo": true, "pasos": true, "no_dulce": true, "proteina": true},
+    "2026-02-27": {"agua": true, "congo": true, "pasos": true, "no_dulce": false, "proteina": false},
+    "2026-02-28": {"agua": true, "pasos": false, "no_dulce": true, "proteina": true},
+    "2026-03-01": {"agua": false, "congo": true, "no_dulce": false, "proteina": true},
+    "2026-03-02": {"congo": true, "proteina": true},
+    "2026-03-03": {"congo": true, "no_dulce": true, "proteina": true},
+    "2026-03-04": {"agua": true, "congo": true, "proteina": true},
+    "2026-03-05": {"agua": true, "congo": true, "no_dulce": true, "proteina": true},
+    "2026-03-06": {"agua": false, "congo": true, "no_dulce": true, "proteina": true},
+    "2026-03-07": {"agua": false, "congo": false, "pasos": true, "no_dulce": false, "proteina": true},
+    "2026-03-08": {"no_dulce": false, "proteina": true},
+    "2026-03-09": {"agua": true, "congo": true, "no_dulce": true, "proteina": true},
+    "2026-03-10": {"no_dulce": true, "proteina": true},
+    "2026-03-11": {"agua": true, "no_dulce": true, "proteina": true},
+    "2026-03-12": {"agua": true, "congo": true, "pasos": false, "no_dulce": true, "proteina": true},
+    "2026-03-13": {"agua": true, "congo": true, "proteina": true},
+    "2026-03-14": {"agua": false, "no_dulce": false, "proteina": true},
+    "2026-03-15": {"congo": true, "pasos": true, "proteina": true},
+    "2026-03-16": {"agua": true, "congo": true, "no_dulce": true, "proteina": true},
+    "2026-03-17": {"agua": true, "congo": true, "pasos": true, "no_dulce": true, "proteina": true},
+    "2026-03-30": {"gym": true},
+    "2026-03-31": {"gym": true, "agua": true, "congo": true, "pasos": true, "no_dulce": true, "proteina": true}
+  },
+  "measurements": {
+    "2025-05": {"peso": 67, "musculo": 61, "proteina": 15, "grasa": 34, "visceral": 6, "agua": 47},
+    "2025-09": {"peso": 68.8, "musculo": 61, "proteina": 14.5, "grasa": 35, "visceral": 7, "agua": 47},
+    "2026-01": {"peso": 71.1, "musculo": 60, "proteina": 14.5, "grasa": 36, "visceral": 7, "agua": 46},
+    "2026-02": {"peso": 70.8, "musculo": 60, "proteina": 14.5, "grasa": 36, "visceral": 7, "agua": 46}
+  }
+}
