@@ -1,4 +1,15 @@
-Notes/
-*.xlsx
-.env
+# Secretos y configuración local
 config.js
+.env
+.env.local
+
+# Documentación interna
+Notes/
+
+# Archivos de datos
+*.xlsx
+*.csv
+
+# Sistemas operativos
+.DS_Store
+Thumbs.db
