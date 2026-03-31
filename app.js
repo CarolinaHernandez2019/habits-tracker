@@ -5,10 +5,8 @@
 
 // ══════════════════════════════════════
 // ── Configuración de Supabase ──
-// Las credenciales se cargan desde config.js (local, no en git)
-// Ver config.js.example para plantilla
-const SUPABASE_URL = typeof CONFIG !== 'undefined' ? CONFIG.SUPABASE_URL : null;
-const SUPABASE_ANON_KEY = typeof CONFIG !== 'undefined' ? CONFIG.SUPABASE_ANON_KEY : null;
+const SUPABASE_URL = 'https://xpkqgpyxihepchuneqnm.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhwa3FxZ3B5eGloZXBjaHVuZXFubSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzcyMTU1ODEyLCJleHAiOjIwODc3MzE4MTV9.sl2L00qs_wZc3St-pQs9P2H_z4Cftfyn1OrebZmv8DQ';
 // ══════════════════════════════════════
 
 // Cliente de Supabase (se inicializa si hay config)
