@@ -1,11 +1,12 @@
 /* Service Worker — cache offline para PWA */
 
-const CACHE_NAME = 'habits-v1';
+const CACHE_NAME = 'habits-v2';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
+  './config.js',
   './manifest.json',
 ];
 
@@ -29,18 +30,26 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: cache-first, luego red
+// Fetch: network-first para archivos de la app, cache como respaldo offline
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+
+  // No cachear llamadas a Supabase
+  if (url.hostname.includes('supabase')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Network-first: intenta red, si falla usa cache
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).then((response) => {
-        // Cachear respuestas nuevas
-        if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        }
-        return response;
-      });
+    fetch(event.request).then((response) => {
+      if (response.ok) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+      }
+      return response;
+    }).catch(() => {
+      return caches.match(event.request);
     })
   );
 });

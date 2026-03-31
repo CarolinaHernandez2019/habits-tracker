@@ -5,8 +5,9 @@
 
 // ══════════════════════════════════════
 // ── Configuración de Supabase ──
-const SUPABASE_URL = 'https://xpkqgpyxihepchuneqnm.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhwa3FxZ3B5eGloZXBjaHVuZXFubSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzcyMTU1ODEyLCJleHAiOjIwODc3MzE4MTV9.sl2L00qs_wZc3St-pQs9P2H_z4Cftfyn1OrebZmv8DQ';
+// Se lee desde config.js (generado por GitHub Actions en deploy, o local)
+const SUPABASE_URL = (typeof CONFIG !== 'undefined' && CONFIG.SUPABASE_URL) || '';
+const SUPABASE_ANON_KEY = (typeof CONFIG !== 'undefined' && CONFIG.SUPABASE_ANON_KEY) || '';
 // ══════════════════════════════════════
 
 // Cliente de Supabase (se inicializa si hay config)
