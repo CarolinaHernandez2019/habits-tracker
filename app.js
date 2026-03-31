@@ -171,12 +171,33 @@ function initializeState() {
 
 // ── Supabase: sync functions ──
 
+// Subir cambios locales pendientes antes de descargar remotos
+async function pushLocalChanges() {
+  if (!db) return;
+
+  const habitRows = Object.entries(state.habits).map(([date, data]) => ({ date, data }));
+  if (habitRows.length > 0) {
+    const { error } = await db.from('daily_habits').upsert(habitRows, { onConflict: 'date' });
+    if (error) throw error;
+  }
+
+  const measRows = Object.entries(state.measurements).map(([month, data]) => ({ month, data }));
+  if (measRows.length > 0) {
+    const { error } = await db.from('measurements').upsert(measRows, { onConflict: 'month' });
+    if (error) throw error;
+  }
+}
+
 // Descargar todo de Supabase → actualizar state
+// Flujo: push local → pull remoto → merge (local gana en conflicto de campos)
 async function syncFromSupabase() {
   if (!db) return false;
 
   try {
     updateSyncIndicator('syncing');
+
+    // Primero subir cambios locales para no perderlos
+    await pushLocalChanges();
 
     // Traer hábitos
     const { data: habitsRows, error: hErr } = await db
@@ -207,15 +228,15 @@ async function syncFromSupabase() {
       }
     }
 
-    // Merge: Supabase tiene prioridad, pero mantenemos datos locales que no existan en remoto
-    // (por si se escribieron offline y aún no se subieron)
-    const mergedHabits = { ...state.habits };
-    for (const [date, data] of Object.entries(remoteHabits)) {
+    // Merge: local tiene prioridad en campos individuales,
+    // remoto aporta fechas/meses que no existan localmente
+    const mergedHabits = { ...remoteHabits };
+    for (const [date, data] of Object.entries(state.habits)) {
       mergedHabits[date] = { ...(mergedHabits[date] || {}), ...data };
     }
 
-    const mergedMeasurements = { ...state.measurements };
-    for (const [month, data] of Object.entries(remoteMeasurements)) {
+    const mergedMeasurements = { ...remoteMeasurements };
+    for (const [month, data] of Object.entries(state.measurements)) {
       mergedMeasurements[month] = { ...(mergedMeasurements[month] || {}), ...data };
     }
 
@@ -904,28 +925,32 @@ async function init() {
     }
   });
 
-  // Reset
+  // Reset (doble confirmación para evitar borrado accidental)
   document.getElementById('btn-reset').addEventListener('click', async () => {
-    if (confirm('¿Estás segura? Se borrarán TODOS los datos. Hacé un export primero si querés guardarlos.')) {
-      localStorage.removeItem('habits-tracker-data');
-      state = { habits: {}, measurements: { ...INITIAL_MEASUREMENTS } };
-      saveToLocal();
+    if (!confirm('¿Estás segura? Se borrarán TODOS los datos locales y en la nube.')) return;
+    if (!confirm('Segunda confirmación: esto NO se puede deshacer. ¿Continuar?')) return;
 
-      // Limpiar Supabase
-      if (db) {
-        try {
-          await db.from('daily_habits').delete().neq('date', '');
-          await db.from('measurements').delete().neq('month', '');
-          // Subir mediciones iniciales
-          await syncAllToSupabase();
-        } catch (err) {
-          console.error('Error al limpiar Supabase:', err);
-        }
+    // Exportar backup automático antes de borrar
+    exportData();
+
+    localStorage.removeItem('habits-tracker-data');
+    state = { habits: {}, measurements: { ...INITIAL_MEASUREMENTS } };
+    saveToLocal();
+
+    // Limpiar Supabase
+    if (db) {
+      try {
+        await db.from('daily_habits').delete().neq('date', '');
+        await db.from('measurements').delete().neq('month', '');
+        // Subir mediciones iniciales
+        await syncAllToSupabase();
+      } catch (err) {
+        console.error('Error al limpiar Supabase:', err);
       }
-
-      renderAll();
-      document.getElementById('modal-settings').classList.remove('open');
     }
+
+    renderAll();
+    document.getElementById('modal-settings').classList.remove('open');
   });
 
   // Re-sincronizar cuando la app vuelve a estar en foco (por si se editó en otro dispositivo)

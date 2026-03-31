@@ -1,19 +1,31 @@
 /* Service Worker — cache offline para PWA */
 
-const CACHE_NAME = 'habits-v2';
-const ASSETS = [
+const CACHE_NAME = 'habits-v3';
+
+// Assets esenciales (deben existir siempre)
+const CORE_ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
-  './config.js',
   './manifest.json',
 ];
 
-// Instalar: cachear archivos
+// Assets opcionales (pueden no existir en todos los entornos)
+const OPTIONAL_ASSETS = [
+  './config.js',
+];
+
+// Instalar: cachear esenciales, intentar opcionales sin romper
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await cache.addAll(CORE_ASSETS);
+      // config.js puede no existir en algunos entornos; si falla, no bloquea
+      for (const asset of OPTIONAL_ASSETS) {
+        try { await cache.add(asset); } catch (e) { /* ignorar */ }
+      }
+    })
   );
   self.skipWaiting();
 });
@@ -34,8 +46,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // No cachear llamadas a Supabase
-  if (url.hostname.includes('supabase')) {
+  // No cachear llamadas a Supabase ni a CDNs externos
+  if (url.hostname.includes('supabase') || url.hostname.includes('cdn.jsdelivr.net')) {
     event.respondWith(fetch(event.request));
     return;
   }
