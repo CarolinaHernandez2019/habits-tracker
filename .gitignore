@@ -1,2 +1,4 @@
 Notes/
 *.xlsx
+.env
+config.js

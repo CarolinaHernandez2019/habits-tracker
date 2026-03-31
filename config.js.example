@@ -1,0 +1,8 @@
+// Configuración local de Supabase
+// COPIA ESTE ARCHIVO A config.js Y LLENA LOS VALORES:
+// cp config.js.example config.js
+
+const CONFIG = {
+  SUPABASE_URL: 'https://xpkqgpyxihepchuneqnm.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhwa3FncHl4aWhlcGNodW5lcW5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNTU4MTUsImV4cCI6MjA4NzczMTgxNX0.sl2L00qs_wZc3St-pQs9P2H_z4Cftfyn1OrebZmv8DQ'
+};

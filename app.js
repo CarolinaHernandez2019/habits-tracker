@@ -5,10 +5,10 @@
 
 // ══════════════════════════════════════
 // ── Configuración de Supabase ──
-// Pegá tu URL y anon key de Supabase aquí:
-// (Settings → API en el dashboard de Supabase)
-const SUPABASE_URL = 'https://xpkqgpyxihepchuneqnm.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhwa3FncHl4aWhlcGNodW5lcW5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNTU4MTUsImV4cCI6MjA4NzczMTgxNX0.sl2L00qs_wZc3St-pQs9P2H_z4Cftfyn1OrebZmv8DQ';
+// Las credenciales se cargan desde config.js (local, no en git)
+// Ver config.js.example para plantilla
+const SUPABASE_URL = typeof CONFIG !== 'undefined' ? CONFIG.SUPABASE_URL : null;
+const SUPABASE_ANON_KEY = typeof CONFIG !== 'undefined' ? CONFIG.SUPABASE_ANON_KEY : null;
 // ══════════════════════════════════════
 
 // Cliente de Supabase (se inicializa si hay config)
@@ -126,6 +126,9 @@ function getWeekDates(d) {
 // ══════════════════════════════════════
 // ── Almacenamiento: local-first + Supabase ──
 // ══════════════════════════════════════
+
+// Control de sincronización automática
+let autoSyncInterval = null;
 
 // Indicador visual de estado de sync
 function updateSyncIndicator(status) {
@@ -930,6 +933,15 @@ async function init() {
       syncFromSupabase().then(() => renderAll());
     }
   });
+
+  // Polling automático: sincronizar cada 10 segundos si hay Supabase configurado
+  if (db) {
+    autoSyncInterval = setInterval(() => {
+      if (!document.hidden) { // Solo si la app está visible
+        syncFromSupabase().then(() => renderAll());
+      }
+    }, 10000); // 10 segundos
+  }
 
   // Service Worker
   if ('serviceWorker' in navigator) {
