@@ -317,8 +317,10 @@ async function loadState() {
         await syncAllToSupabase();
       }
     }
-    renderAll();
   }
+
+  // Renderizar siempre (con datos de Supabase o localStorage)
+  renderAll();
 }
 
 // Guardar hábito: local inmediato + Supabase en background
